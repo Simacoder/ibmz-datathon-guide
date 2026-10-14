@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>IBM Z Datathon 2026 · LinuxONE Setup Guide</title>
+  <meta name="description" content="Step-by-step guide to register, provision and connect to your IBM LinuxONE Community Cloud server for the IBM Z Datathon 2026." />
+  <meta name="theme-color" content="#0a2a6b" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="sky" aria-hidden="true">
+    <span class="star s1"></span><span class="star s2"></span><span class="star s3"></span>
+    <span class="star s4"></span><span class="star s5"></span><span class="star s6"></span>
+  </div>
+
+  <header class="top">
+    <div class="brand">
+      <div class="logo">★</div>
+      <div>
+        <div class="brand-top">SHOOTING STARS FOUNDATION <span class="x">×</span> IBM</div>
+        <div class="brand-sub">IBM Z Datathon 2026 · LinuxONE Setup Guide</div>
+      </div>
+    </div>
+    <div class="progress-wrap" aria-label="Overall progress">
+      <div class="progress-label"><span id="progressText">0% done</span></div>
+      <div class="progress"><div id="progressBar"></div></div>
+    </div>
+  </header>
+
+  <main class="layout">
+    <nav class="steps" aria-label="Setup steps">
+      <button class="step-btn active" data-step="0"><span class="num">1</span><span><b>Register</b><small>Create your account</small></span></button>
+      <button class="step-btn" data-step="1"><span class="num">2</span><span><b>Provision</b><small>Create your server</small></span></button>
+      <button class="step-btn" data-step="2"><span class="num">3</span><span><b>Connect</b><small>Windows or Mac</small></span></button>
+      <button class="step-btn" data-step="3"><span class="num">✓</span><span><b>Done</b><small>You're ready</small></span></button>
+    </nav>
+
+    <section class="stage" id="stage" aria-live="polite"></section>
+  </main>
+
+  <footer class="foot">
+    Created by <b>Simanga Mchunu</b>, Mentor · Shooting Stars Foundation × IBM · IBM Z Datathon 2026
+  </footer>
+
+  <button id="chatFab" class="fab" aria-label="Ask the setup guide">💬 Need help?</button>
+  <aside id="chat" class="chat hidden" aria-label="Setup assistant">
+    <div class="chat-head">
+      <div><b>Setup Guide Assistant</b><small>Ask me anything about the lab setup</small></div>
+      <button id="chatClose" aria-label="Close">✕</button>
+    </div>
+    <div id="chatLog" class="chat-log"></div>
+    <div class="chips" id="chips"></div>
+    <form id="chatForm" class="chat-form">
+      <input id="chatInput" placeholder="e.g. Which email should I use?" autocomplete="off" />
+      <button type="submit">Send</button>
+    </form>
+  </aside>
+
+  <script src="app.js"></script>
+</body>
+</html>

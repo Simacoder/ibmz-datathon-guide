@@ -1,0 +1,8 @@
+{
+  "name": "ibmz-datathon-2026-setup-guide",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Guided LinuxONE setup for the IBM Z Datathon 2026 (Shooting Stars Foundation x IBM)",
+  "type": "module",
+  "engines": { "node": ">=18" }
+}
