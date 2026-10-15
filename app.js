@@ -52,7 +52,7 @@ const GUIDE = {
   ],
 };
 
-const STEP_NAMES = ["Register", "Provision", "Connect", "Done", "Guidebook"];
+const STEP_NAMES = ["Register", "Provision", "Connect", "Done", "Guidebook", "FAQs"];
 const LS = "ibmz-datathon-2026";
 let state = load() || { step: 0, os: null, checks: {} };
 function load() { try { return JSON.parse(localStorage.getItem(LS)); } catch { return null; } }
@@ -326,11 +326,78 @@ function viewGuide() {
       <a class="btn" href="${CFG.discordInvite}" target="_blank" rel="noopener">Join the Discord ↗</a>
       ${CFG.mentorChannels.map((c) => `<a class="btn ghost" href="${c[1]}" target="_blank" rel="noopener">${c[0]} ↗</a>`).join("")}
     </div>
-    <div class="callout info">Mention <b>@simanga_</b> (your mentor) or any other mentor in the channels above. Include what you tried and any error message you see.</div>
+    <div class="callout info">Mention <b>@simanga_</b> (your mentor) or any other mentor in the channels above. Include what you tried and any error message you see. Quick answers are in the <a href="#" data-goto="5">FAQs</a>.</div>
   </div>`;
 }
 
-const VIEWS = [viewRegister, viewProvision, viewConnect, viewDone, viewGuide];
+/* ---------- FAQs ---------- */
+const Y25 = `<span class="badge">From the 2025 Datathon</span>`;
+const FAQ_CATS = [["all", "All"], ["setup", "Setup & connecting"], ["event", "Event & submission"], ["after", "Certificates & prizes"], ["help", "Getting help"]];
+const FAQ = [
+  /* setup */
+  { c: "setup", q: "Which email should I register with?", a: `Use a <b>non-Microsoft</b> email such as Gmail, Yahoo, iCloud or Proton. IBM currently has an issue with <b>Hotmail and Outlook</b> addresses (the activation email won’t arrive), and Microsoft 365 school/work addresses should be avoided too. Already registered with a Microsoft email? Register again with a non-Microsoft one.` },
+  { c: "setup", q: "What are the event code and the description?", a: `Event code: <code>${CFG.eventCode}</code>. The description is only a sample and can be edited later, e.g. “${CFG.descriptionSample}”.` },
+  { c: "setup", q: "I didn’t get the activation email.", a: `Check spam/junk and wait a few minutes. It comes from <code>noreply@linuxone.cloud.marist.edu</code> and is titled “IBM LinuxONE Community Cloud Registration - Action required to complete”. The activation link is valid for <b>48 hours</b>. If it never arrives, check that you didn’t use Hotmail, Outlook, Live or Microsoft 365, then register again with another email.` },
+  { c: "setup", q: "Which image and flavor do I pick when creating my server?", a: `Image <code>RHEL8.7</code>, flavor <code>LinuxONE</code> (the only option). The instance name can be anything, e.g. <code>test1234</code>.` },
+  { c: "setup", q: "My server status says UNKNOWN.", a: `That’s normal. It goes UNKNOWN → spawning → <b>ACTIVE</b> and can take a few minutes. ACTIVE means your server is ready.` },
+  { c: "setup", q: "Where do I find my IP address, user name and key file?", a: `On <a href="${CFG.instanceUrl}" target="_blank" rel="noopener">Virtual Servers</a>: your IP is in the <b>IP Address</b> column of your ACTIVE server and the user is <code>linux1</code>. The <code>.pem</code> key file was downloaded by your browser when you created the key pair — check your Downloads folder and keep it safe.` },
+  { c: "setup", q: "How do I connect from Windows or Mac?", a: `<b>Windows:</b> follow the <a href="${CFG.puttyPdf}" target="_blank" rel="noopener">PuTTY fast start guide</a>. <b>Mac:</b> in Terminal run <code>chmod 400 &lt;path-to-key-file&gt;</code> then <code>ssh linux1@&lt;ip-address&gt; -i &lt;path-to-key-file&gt;</code> and type <code>yes</code> at the fingerprint question. Full steps are in the Connect tab.` },
+  { c: "setup", q: "Mac says “UNPROTECTED PRIVATE KEY FILE” or “permission denied”.", a: `Run <code>chmod 400 &lt;path-to-key-file&gt;</code> on your <code>.pem</code> file first, then retry the <code>ssh</code> command.` },
+  { c: "setup", q: "How do I know I’m connected?", a: `You’ll see the <b>IBM LinuxONE</b> welcome banner and a prompt like <code>[linux1@test1234 ~]$</code>.` },
+  /* event */
+  { c: "event", q: "Do I have to attend in person?", a: `Not necessarily. The Datathon runs in person at 8 hubs <b>and</b> as Global Virtual, so you can take part from anywhere. See the Guidebook for the list of hubs.` },
+  { c: "event", q: "How big can my team be?", a: `Teams have <b>4–6 members</b>.` },
+  { c: "event", q: "Do I have to pick a theme?", a: `Choose a problem under one theme: <b>Real-time AI for critical decisions</b> or <b>AI secured: Innovation without exposure</b>. If you find an important or overlooked problem outside both, make a <b>wildcard</b> entry and use AI in a new, unexpected or technically ambitious way.` },
+  { c: "event", q: "Do I have to use IBM Z (LinuxONE)?", a: `Yes — your solution must leverage the IBM Z (LinuxONE) platform. Judges ask whether it’s used <b>meaningfully, not just as hosting</b>, so show your LinuxONE instance and your model in the video.` },
+  { c: "event", q: "What do I submit, and where?", a: `Submit on <a href="${CFG.submitUrl}" target="_blank" rel="noopener">Hack2Skill</a>. <b>Required:</b> a video of max 3 minutes and your code (GitHub/GitLab link or zip). <b>Optional:</b> a flowchart of your design and a prototype. Not sure how? <a href="${CFG.videoHelpUrl}" target="_blank" rel="noopener">Watch the how-to video</a>.` },
+  { c: "event", q: "What should my 3-minute video cover?", a: `The <b>problem statement</b>, the <b>data</b> that supports the problem, your <b>solution</b>, and — most important — <b>how it leverages IBM Z</b> (share your tech stack, show your LinuxONE instance and model). The video is compulsory and must be 3 minutes or less.` },
+  { c: "event", q: "How should I name my project?", a: `The project title must contain your Team Name, e.g. <code>${esc(CFG.titleExample)}</code>.` },
+  { c: "event", q: "What time zone is the countdown in?", a: `UTC (standard time). It counts down to the start on 17 October 2026, 00:00 UTC, then to the end on 19 October 2026, 00:00 UTC. Convert to your local time to plan your weekend.` },
+  { c: "event", q: "How will projects be judged?", a: `On value to the community and theme fit, novelty and originality, and technical design including meaningful use of the LinuxONE Community Cloud and AI/ML open-source packages. The AI Innovation Excellence Awards add AI innovation &amp; originality and transformational impact &amp; technical excellence. Details are in the Guidebook.` },
+  /* after the event: based on 2025 */
+  { c: "after", q: "When will I get my certificate?", a: `${Y25}Last year certificates were issued <b>after</b> the event in rolling batches, because there were over 14,000 participants. Everyone who took part at any stage got one — idea submission, project submission, the questathon and raffles. For 2026, watch the Discord announcement channel; the 2026 timeline isn’t confirmed yet.` },
+  { c: "after", q: "I got my certificate, but my teammate didn’t (or the reverse).", a: `${Y25}Certificates were issued per person, using the details from individual and team registrations. If one is missing, use the issue form the organizers share, and give the <b>full names</b> of the people affected. Mentors can pass your message on but can’t issue certificates.` },
+  { c: "after", q: "My certificate has the wrong name.", a: `${Y25}Names were pulled from registration details, so double-check the spelling of your name when you register. Last year a short-lived issue form was opened for misspellings and wrong or missing certificates — submit it as soon as it’s shared, because it closed within days.` },
+  { c: "after", q: "I missed the certificate issue-form deadline.", a: `${Y25}Once the form closed, mentors couldn’t reopen it. They could still forward your full name to the organizing team, but there’s no guarantee. Don’t wait: act as soon as a form is announced.` },
+  { c: "after", q: "When and how are prizes and raffle winners announced?", a: `${Y25}Raffle winners were contacted after the event and had to submit a payment-details form by a deadline; people who missed the deadline had to ask the organizers whether a late form could still be processed. Mentors aren’t the prize admins, so ask the organizers in the Discord help channels. Check your registration email (and spam) and complete any form before its deadline. 2026 details haven’t been confirmed.` },
+  { c: "after", q: "Can I get photos from the in-person event?", a: `I don’t have an official answer for this. Ask your hub organizers or the organizing team in the Discord.` },
+  /* help */
+  { c: "help", q: "Where can I get help during the Datathon?", a: `Ask the <b>Setup Guide Assistant</b> (💬 bottom right), or <a href="${CFG.discordInvite}" target="_blank" rel="noopener">join the Discord</a> and post in the mentor channels, or mention <b>@simanga_</b>. Say what you tried and include any error message.` },
+  { c: "help", q: "Can mentors fix certificate, prize or raffle problems?", a: `Mentors can pass your message to the organizers, but they aren’t the admins for certificates, raffles or prizes. Share your full name and team name, and avoid posting personal details such as ID numbers publicly.` },
+  { c: "help", q: "Someone in the Discord is advertising a service or link — is it official?", a: `Treat it as unofficial unless it comes from the organizers in an announcement channel. Don’t pay anyone, and don’t share passwords, ID numbers or key files. Tell a mentor or moderator.` },
+];
+
+let faqCat = "all";
+function viewFaq() {
+  const attr = (s) => s.replace(/"/g, "&quot;");
+  const plain = (f) => (f.q + " " + f.a).replace(/<[^>]+>/g, " ").replace(/&[a-z]+;/g, " ").toLowerCase();
+  return `
+  <div class="card">
+    <span class="pill">FAQS</span>
+    <h1>Frequently asked questions</h1>
+    <p class="lead">Quick answers on setup, the event, submitting, and what happens afterwards. Can’t find yours? Ask the 💬 assistant or a mentor.</p>
+    <input class="input" id="faqSearch" type="search" placeholder="Search, e.g. email, certificate, video, key…" autocomplete="off" aria-label="Search FAQs" />
+    <div class="cats">${FAQ_CATS.map((c) => `<button type="button" class="chip ${faqCat === c[0] ? "on" : ""}" data-cat="${c[0]}">${c[1]}</button>`).join("")}</div>
+    <div class="faqcount" id="faqCount"></div>
+  </div>
+  <div class="card" id="faqList">
+    ${FAQ.map((f) => `<details class="faq" data-c="${f.c}" data-t="${attr(plain(f))}"><summary>${f.q}</summary><p>${f.a}</p></details>`).join("")}
+    <div class="callout info" id="faqEmpty" hidden>No match. Try another word, ask the 💬 assistant, or reach a mentor on <a href="${CFG.discordInvite}" target="_blank" rel="noopener">Discord</a>.</div>
+  </div>`;
+}
+
+function filterFaq() {
+  const q = ($("#faqSearch").value || "").trim().toLowerCase();
+  let n = 0;
+  $$("details.faq").forEach((d) => {
+    const ok = (faqCat === "all" || d.dataset.c === faqCat) && (!q || q.split(/\s+/).every((w) => d.dataset.t.includes(w)));
+    d.hidden = !ok; if (ok) n++;
+  });
+  $("#faqEmpty").hidden = n > 0;
+  $("#faqCount").textContent = n + (n === 1 ? " question" : " questions");
+}
+
+const VIEWS = [viewRegister, viewProvision, viewConnect, viewDone, viewGuide, viewFaq];
 
 function render() {
   $("#stage").innerHTML = VIEWS[state.step]();
@@ -358,6 +425,12 @@ function bind() {
     if (CFG.blockedDomains.includes(dom)) msg.innerHTML = `<span style="color:var(--bad)">✋ <b>${esc(dom)}</b> is a Microsoft email and IBM’s confirmation emails won’t reach it. Please use a non-Microsoft email such as Gmail, Yahoo or iCloud instead.</span>`;
     else msg.innerHTML = `<span style="color:var(--ok)">✅ Not a known Microsoft domain. One more check: if this is a school or work address, make sure it is <b>not hosted on Microsoft 365</b> (ask your school IT if unsure) — otherwise use a personal non-Microsoft email. You must be able to open this inbox.</span>`;
   };
+  const fs = $("#faqSearch");
+  if (fs) {
+    fs.oninput = filterFaq;
+    $$("[data-cat]").forEach((b) => b.onclick = () => { faqCat = b.dataset.cat; $$("[data-cat]").forEach((x) => x.classList.toggle("on", x === b)); filterFaq(); });
+    filterFaq();
+  }
   const r = $("#reset"); if (r) r.onclick = () => { state = { step: 0, os: null, checks: {} }; render(); };
 }
 
@@ -365,6 +438,7 @@ $$(".step-btn").forEach((b) => b.onclick = () => { state.step = +b.dataset.step;
 
 /* ---------- assistant ---------- */
 const KB = [
+  { k: ["certificate", "certificates", "raffle", "raffles", "prizes", "winner", "winners", "photos", "pictures", "wrong name", "misspell", "misspelled", "issue form"], a: "Based on the 2025 Datathon (2026 isn’t confirmed yet): certificates were issued after the event in rolling batches to everyone who took part at any stage, using the details from registration, so spell your name correctly when you register. A short-lived issue form handled wrong or missing certificates — use it as soon as it’s shared. Raffle winners were contacted after the event and had to submit a payment-details form by a deadline. Mentors can pass your message on but aren’t the admins, so ask the organizers in the Discord. See the FAQs tab for more." },
   { k: ["email", "outlook", "hotmail", "microsoft", "school", "which mail"], a: "Use a non-Microsoft email such as Gmail, Yahoo or iCloud. IBM currently has an issue with Hotmail and Outlook addresses (the activation email won’t arrive), and Microsoft 365 addresses (including many school/work emails) should be avoided too. If you already registered with a Microsoft email, register again with a non-Microsoft one." },
   { k: ["event", "code", "ssf"], a: `The event code is ${CFG.eventCode}. Enter it exactly like that in the registration form.` },
   { k: ["description", "describe"], a: `The description is just a sample and you can edit it later. For example: "${CFG.descriptionSample}"` },
@@ -384,7 +458,7 @@ const KB = [
   { k: ["theme", "themes", "problem statement", "wildcard", "topic", "real-time", "secured"], a: "There is no single problem statement. Pick a theme: Real-time AI for critical decisions, or AI secured: Innovation without exposure. Or make a Wildcard entry for an important or overlooked problem outside the themes — use AI in a new, unexpected or technically ambitious way. You must leverage IBM Z (LinuxONE)." },
   { k: ["dates", "deadline", "countdown", "hubs", "campus", "campuses", "in-person", "virtual", "team size", "members", "prize", "how many people"], a: "The Datathon runs 17–18 October 2026 — in-person at 8 hubs (Saveetha Engineering College Chennai, Global Academy of Technology Bangalore, Manchester University, NYU, UT Dallas, Federation University Ballarat, Cyberjaya University, NTU Singapore) and Global Virtual. Teams of 4–6. Prize bucket $50k+. The countdown (top right) runs in UTC from 17 to 19 October." },
 ];
-const CHIPS = ["Which email should I use?", "What is the event code?", "I didn’t get the activation email", "What do I pick for the image?", "How do I connect on Mac?", "How do I connect on Windows?", "How do I submit?", "How will I be judged?"];
+const CHIPS = ["Which email should I use?", "What is the event code?", "I didn’t get the activation email", "What do I pick for the image?", "How do I connect on Mac?", "How do I connect on Windows?", "How do I submit?", "How will I be judged?", "When do certificates arrive?"];
 
 function localAnswer(q) {
   const t = q.toLowerCase();

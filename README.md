@@ -21,6 +21,9 @@ Includes a progress tracker (saved in the browser), copy buttons, an email check
 ## Participant Guidebook and countdown
 The **Guidebook** tab holds the event details, hubs, themes, submission rules and checklist, judging criteria and help links. The top-right countdown runs in UTC from 17 Oct 2026 00:00 to 19 Oct 2026 00:00 (change `countdownStart` / `countdownEnd` in `CFG`).
 
+## FAQs
+The **FAQs** tab has 27 searchable questions (Setup & connecting, Event & submission, Certificates & prizes, Getting help). Answers learned from the 2025 Datathon are labelled "From the 2025 Datathon" because the 2026 process may differ. Edit the `FAQ` array in `app.js` to add or change questions; the assistant's matching answers live in `KB` (`app.js`) and the facts in `api/chat.js`.
+
 ## Edit the event details
 Open `app.js` and change `CFG` and `GUIDE` at the top (event code, sample description, blocked email domains, countdown, links, hubs, judging text).
 
