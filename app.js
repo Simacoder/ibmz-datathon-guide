@@ -12,9 +12,47 @@ const CFG = {
   // Personal Microsoft-hosted consumer domains that must NOT be used.
   blockedDomains: ["outlook.com", "hotmail.com", "live.com", "msn.com", "passport.com", "outlook.co.za", "hotmail.co.za", "live.co.za"],
   repo: "https://github.com/jacobemery/linux1-lab/blob/general/instructions/",
+  // Countdown (UTC / "standard time"): starts 17 Oct 00:00, ends 19 Oct 00:00 (covers all of 17th and 18th)
+  countdownStart: Date.UTC(2026, 9, 17, 0, 0, 0),
+  countdownEnd: Date.UTC(2026, 9, 19, 0, 0, 0),
+  submitUrl: "https://hack2skill.com/event/datathon-2026",
+  videoHelpUrl: "https://youtu.be/3_L3T__zEco",
+  discordInvite: "https://discord.gg/vVUwEJh3fH",
+  mentorChannels: [
+    ["Mentor help channel 1", "https://discord.com/channels/1517057210029441044/1559111191899668540"],
+    ["Mentor help channel 2", "https://discord.com/channels/1517057210029441044/1517857148778844310"],
+  ],
+  titleExample: "[Team Name_IBM Z Datathon 2026 Project]",
 };
 
-const STEP_NAMES = ["Register", "Provision", "Connect", "Done"];
+const GUIDE = {
+  facts: [["DATES", "17–18 October 2026"], ["MODE", "In-person at 8 hubs + Global Virtual"], ["TEAM SIZE", "4–6 members"], ["PRIZE BUCKET", "$50k+"]],
+  hubs: [
+    ["Saveetha Engineering College", "Chennai, India"], ["Global Academy of Technology", "Bangalore, India"],
+    ["Manchester University", "UK"], ["New York University", "USA"],
+    ["University of Texas at Dallas", "USA"], ["Federation University", "Ballarat, Australia"],
+    ["Cyberjaya University", "Malaysia"], ["NTU", "Singapore"],
+  ],
+  submitChecklist: [
+    ["Video of 3 minutes maximum", "Cover: the <b>problem statement</b>, the <b>data</b> that supports the problem, your <b>solution</b>, and — most important — <b>how it leverages IBM Z</b>."],
+    ["Show your IBM Z usage in the video", "Share your <b>tech stack</b>, and show your <b>LinuxONE instance</b> and your <b>model</b>."],
+    ["Code link or upload", "A GitHub/GitLab repo link, a zip upload — whatever works. Make sure the repo is accessible."],
+    ["Project title contains your Team Name", `Example: <code>${CFG.titleExample}</code>`],
+    ["Optional: flowchart of your design", "Helps judges follow your architecture quickly."],
+    ["Optional: prototype (if available)", "A working demo or clickable prototype."],
+  ],
+  judgingA: [
+    ["1", "Value to the Community & Datathon Theme Alignment", "Who benefits, and how does the solution fit the theme?"],
+    ["2", "Novelty & Idea Originality", "What makes this different from existing solutions?"],
+    ["3", "Technical Design & Use of Mainframe / LinuxONE Community Cloud platform and AI/ML open-source packages/code", "Is the platform used meaningfully, not just as hosting? Is the architecture sound?"],
+  ],
+  judgingB: [
+    ["1", "AI Innovation & Originality", "Is the AI/ML component a genuine innovation or a generic add-on?"],
+    ["2", "Transformational Impact & Technical Excellence", "How big is the potential impact, and how robust is the implementation?"],
+  ],
+};
+
+const STEP_NAMES = ["Register", "Provision", "Connect", "Done", "Guidebook"];
 const LS = "ibmz-datathon-2026";
 let state = load() || { step: 0, os: null, checks: {} };
 function load() { try { return JSON.parse(localStorage.getItem(LS)); } catch { return null; } }
@@ -93,7 +131,7 @@ function checklist(key, items) {
 function stepDone(i) {
   const keys = i === 0 ? STEPS.register.length : i === 1 ? STEPS.provision.length : null;
   const prefix = i === 0 ? "reg" : i === 1 ? "prov" : null;
-  if (i === 3) return false;
+  if (i >= 3) return false;
   if (i === 2) {
     if (!state.os) return false;
     const n = STEPS[state.os].length;
@@ -214,11 +252,85 @@ function viewDone() {
     <h1>You’re connected to IBM LinuxONE!</h1>
     <p class="lead">Your server is running on IBM Z hardware. You’re ready for the IBM Z Datathon 2026.</p>
     <div class="callout ok">Next up: the lab’s <a href="${CFG.repo}4_navigate.md" target="_blank" rel="noopener">Step 4 – Navigating Linux</a>, and your datathon briefing from the mentors.</div>
-    <div class="nav" style="justify-content:center"><button class="btn ghost" data-goto="2">← Back</button><button class="btn" id="reset">Start over</button></div>
+    <div class="callout info">📖 Read the <a href="#" data-goto="4">Participant Guidebook</a> for the challenge themes, what to submit and how you’ll be judged.</div>
+    <div class="nav" style="justify-content:center"><button class="btn ghost" data-goto="2">← Back</button><button class="btn" data-goto="4">Open the Guidebook →</button><button class="btn ghost" id="reset">Start over</button></div>
   </div>`;
 }
 
-const VIEWS = [viewRegister, viewProvision, viewConnect, viewDone];
+function critTable(rows) {
+  return `<div class="tablewrap"><table class="crit"><thead><tr><th>#</th><th>CRITERION</th><th>QUESTIONS TO NUDGE TEAMS</th></tr></thead><tbody>${rows.map((r) => `<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td></tr>`).join("")}</tbody></table></div>`;
+}
+
+function viewGuide() {
+  const G = GUIDE;
+  return `
+  <div class="card">
+    <span class="pill">PARTICIPANT GUIDEBOOK</span>
+    <h1>IBM Z Datathon Challenge</h1>
+    <p class="lead">Everything you need for the weekend: the challenge, what to submit, how you’ll be judged, and where to get help.</p>
+    <div class="facts">${G.facts.map((f) => `<div class="tile"><label>${f[0]}</label><b>${f[1]}</b></div>`).join("")}</div>
+  </div>
+
+  <div class="card">
+    <h2>📍 In-person hubs</h2>
+    <p class="lead" style="margin-bottom:0">Eight campuses host in-person teams. You can also join from anywhere in the world via Global Virtual.</p>
+    <div class="hubs">${G.hubs.map((h) => `<div class="hub"><b>${h[0]}</b><small>${h[1]}</small></div>`).join("")}<div class="hub virtual"><b>🌍 Global Virtual</b><small>Join from anywhere</small></div></div>
+  </div>
+
+  <div class="card">
+    <h2>🎯 The challenge</h2>
+    <p class="lead">There is <b>no single problem statement</b>. As a team, choose a problem under one of the themes below.</p>
+    <div class="themes">
+      <div class="theme"><div class="n">⚡</div><b>Real-time AI for critical decisions</b><p>Theme 1</p></div>
+      <div class="theme"><div class="n">🔐</div><b>AI secured: Innovation without exposure</b><p>Theme 2</p></div>
+      <div class="theme wild"><div class="n">🌠</div><b>Wildcard</b><p>Found an important or overlooked problem outside the two themes? Use AI in a new, unexpected or technically ambitious way and make a wildcard entry.</p></div>
+    </div>
+    <div class="callout info">🧩 You must <b>leverage the IBM Z (LinuxONE) platform</b> to solve problems you see around you and in your lives. How will you use data and ML to create a better world?</div>
+  </div>
+
+  <div class="card">
+    <h2>📤 How to submit</h2>
+    <div class="btnrow">
+      <a class="btn" href="${CFG.submitUrl}" target="_blank" rel="noopener">Open the submission page ↗</a>
+      <a class="btn ghost" href="${CFG.videoHelpUrl}" target="_blank" rel="noopener">▶ Don’t know how? Watch the video</a>
+    </div>
+    <div class="field" style="margin:12px 0">
+      <label>PROJECT TITLE MUST CONTAIN YOUR TEAM NAME</label>
+      <div class="copyrow"><span class="val">${CFG.titleExample}</span><button class="btn sm" data-copy="${esc(CFG.titleExample)}">Copy</button></div>
+    </div>
+    <div class="two">
+      <div class="callout ok" style="margin:0"><b>Required</b><ul class="plain"><li>Video demo, max 3 minutes (compulsory)</li><li>Your code (GitHub/GitLab link or zip)</li></ul></div>
+      <div class="callout info" style="margin:0"><b>Optional</b><ul class="plain"><li>Flowchart of your design</li><li>Prototype (if available)</li></ul></div>
+    </div>
+    <div class="callout warn">⏱ The <b>video is compulsory</b> and must be <b>3 minutes or less</b>. Don’t forget to add your GitHub/GitLab repo link to your submission.</div>
+  </div>
+
+  <div class="card">
+    <h2>✅ Before you submit — checklist</h2>
+    ${checklist("sub", G.submitChecklist)}
+  </div>
+
+  <div class="card">
+    <h2>🏆 Judging criteria</h2>
+    <p class="lead">Keep these in view while you build. The right-hand column shows the questions judges (and mentors) will use to steer teams.</p>
+    <h2 style="font-size:15px">Datathon Judging Criteria</h2>
+    ${critTable(G.judgingA)}
+    <h2 style="font-size:15px">AI Innovation Excellence Awards — Judge Scoring Rubric (All Regions)</h2>
+    ${critTable(G.judgingB)}
+  </div>
+
+  <div class="card">
+    <h2>🙋 Need help?</h2>
+    <p class="lead">Stuck on setup or your project? Ask the <b>Setup Guide Assistant</b> (the 💬 button, bottom right), or reach a mentor on Discord.</p>
+    <div class="btnrow">
+      <a class="btn" href="${CFG.discordInvite}" target="_blank" rel="noopener">Join the Discord ↗</a>
+      ${CFG.mentorChannels.map((c) => `<a class="btn ghost" href="${c[1]}" target="_blank" rel="noopener">${c[0]} ↗</a>`).join("")}
+    </div>
+    <div class="callout info">Mention <b>@simanga_</b> (your mentor) or any other mentor in the channels above. Include what you tried and any error message you see.</div>
+  </div>`;
+}
+
+const VIEWS = [viewRegister, viewProvision, viewConnect, viewDone, viewGuide];
 
 function render() {
   $("#stage").innerHTML = VIEWS[state.step]();
@@ -266,14 +378,19 @@ const KB = [
   { k: ["mac", "terminal", "chmod", "permission", "unprotected"], a: "On Mac, open Terminal, run: chmod 400 <path-to-key-file>, then: ssh linux1@<ip-address> -i <path-to-key-file>. Type yes when asked about the fingerprint." },
   { k: ["connect", "login", "log in", "ssh"], a: "Pick your computer in Step 3 (Windows = PuTTY, Mac = Terminal). You’re connected when you see the IBM LinuxONE banner and a prompt like [linux1@test1234 ~]$." },
   { k: ["browser", "chrome", "firefox", "safari", "edge"], a: "Use Firefox or Google Chrome for the LinuxONE Community Cloud website." },
-  { k: ["who", "mentor", "created", "simanga", "help"], a: "This guide was created by Simanga Mchunu, Mentor, for the Shooting Stars Foundation × IBM — IBM Z Datathon 2026. Ask your mentor if you’re stuck." },
+  { k: ["who", "mentor", "created", "simanga", "help", "discord", "stuck", "support"], a: `This guide was created by Simanga Mchunu, Mentor, for the Shooting Stars Foundation × IBM — IBM Z Datathon 2026. For help, join the Discord (${CFG.discordInvite}) and post in the mentor channels, or mention @simanga_.` },
+  { k: ["submit", "submission", "hack2skill", "video", "3 min", "three min", "minutes", "github", "gitlab", "repo", "title", "team name", "flowchart", "prototype"], a: `Submit at ${CFG.submitUrl}. Required: a video of max 3 minutes (problem, supporting data, your solution, and how it leverages IBM Z — show your tech stack, LinuxONE instance and model) plus your code (GitHub/GitLab link or zip). Optional: flowchart and prototype. Your project title must contain your Team Name, e.g. ${CFG.titleExample}. How-to video: ${CFG.videoHelpUrl}` },
+  { k: ["judge", "judging", "criteria", "criterion", "score", "scoring", "rubric", "win", "award"], a: "Datathon criteria: (1) Value to the Community & Theme Alignment, (2) Novelty & Idea Originality, (3) Technical Design & meaningful use of the LinuxONE Community Cloud and AI/ML open-source packages. AI Innovation Excellence Awards: (1) AI Innovation & Originality, (2) Transformational Impact & Technical Excellence. Judges ask whether IBM Z is used meaningfully, not just as hosting." },
+  { k: ["theme", "themes", "problem statement", "wildcard", "topic", "real-time", "secured"], a: "There is no single problem statement. Pick a theme: Real-time AI for critical decisions, or AI secured: Innovation without exposure. Or make a Wildcard entry for an important or overlooked problem outside the themes — use AI in a new, unexpected or technically ambitious way. You must leverage IBM Z (LinuxONE)." },
+  { k: ["dates", "deadline", "countdown", "hubs", "campus", "campuses", "in-person", "virtual", "team size", "members", "prize", "how many people"], a: "The Datathon runs 17–18 October 2026 — in-person at 8 hubs (Saveetha Engineering College Chennai, Global Academy of Technology Bangalore, Manchester University, NYU, UT Dallas, Federation University Ballarat, Cyberjaya University, NTU Singapore) and Global Virtual. Teams of 4–6. Prize bucket $50k+. The countdown (top right) runs in UTC from 17 to 19 October." },
 ];
-const CHIPS = ["Which email should I use?", "What is the event code?", "I didn’t get the activation email", "What do I pick for the image?", "How do I connect on Mac?", "How do I connect on Windows?"];
+const CHIPS = ["Which email should I use?", "What is the event code?", "I didn’t get the activation email", "What do I pick for the image?", "How do I connect on Mac?", "How do I connect on Windows?", "How do I submit?", "How will I be judged?"];
 
 function localAnswer(q) {
   const t = q.toLowerCase();
   let best = null, score = 0;
-  for (const e of KB) { const s = e.k.filter((w) => t.includes(w)).length; if (s > score) { score = s; best = e; } }
+  const hit = (w) => (w.length <= 3 ? new RegExp("\\b" + w + "\\b").test(t) : t.includes(w));
+  for (const e of KB) { const s = e.k.filter(hit).length; if (s > score) { score = s; best = e; } }
   return best ? best.a : "I can help with registering (email, event code, description), provisioning your server, and connecting on Windows or Mac. Try one of the quick questions, or ask your mentor.";
 }
 
@@ -300,5 +417,21 @@ $("#chatClose").onclick = () => { $("#chat").classList.add("hidden"); $("#chatFa
 $("#chatForm").onsubmit = (e) => { e.preventDefault(); const v = $("#chatInput").value.trim(); if (!v) return; $("#chatInput").value = ""; ask(v); };
 $("#chips").innerHTML = CHIPS.map((c) => `<button type="button" class="chip">${c}</button>`).join("");
 $$(".chip").forEach((c) => c.onclick = () => ask(c.textContent));
+
+/* ---------- countdown (UTC) ---------- */
+function tick() {
+  const now = Date.now();
+  let label, ms;
+  if (now < CFG.countdownStart) { label = "STARTS IN"; ms = CFG.countdownStart - now; }
+  else if (now < CFG.countdownEnd) { label = "ENDS IN"; ms = CFG.countdownEnd - now; }
+  else { label = "DATATHON ENDED"; ms = 0; }
+  const s = Math.floor(ms / 1000), p = (n) => String(n).padStart(2, "0");
+  $("#cdLabel").textContent = label;
+  $("#cdD").textContent = p(Math.floor(s / 86400));
+  $("#cdH").textContent = p(Math.floor((s % 86400) / 3600));
+  $("#cdM").textContent = p(Math.floor((s % 3600) / 60));
+  $("#cdS").textContent = p(s % 60);
+}
+tick(); setInterval(tick, 1000);
 
 render();

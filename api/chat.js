@@ -13,6 +13,11 @@ FACTS
 - Windows: connect with PuTTY, following https://github.com/linuxone-community-cloud/technical-resources/blob/master/faststart/PUTTY_Set_up.pdf
 - Mac: Terminal > chmod 400 <path-to-key-file> > ssh linux1@<ip-address> -i <path-to-key-file> > type yes at the fingerprint prompt.
 - Success: IBM LinuxONE welcome banner and a prompt like [linux1@test1234 ~]$. Next is lab step 4 (navigating Linux).
+- Event: IBM Z Datathon 2026, 17-18 October 2026. In-person at 8 hubs (Saveetha Engineering College Chennai; Global Academy of Technology Bangalore; Manchester University UK; New York University USA; University of Texas at Dallas USA; Federation University Ballarat Australia; Cyberjaya University Malaysia; NTU Singapore) plus Global Virtual. Teams of 4-6. Prize bucket $50k+. Site countdown runs in UTC from 17 to 19 October.
+- Challenge: no single problem statement. Themes: "Real-time AI for critical decisions" and "AI secured: Innovation without exposure". Wildcard entry allowed for an important or overlooked problem outside the themes, using AI in a new, unexpected or technically ambitious way. Teams must leverage IBM Z (LinuxONE).
+- Submission: https://hack2skill.com/event/datathon-2026 (how-to video: https://youtu.be/3_L3T__zEco). Required: video of max 3 minutes covering problem statement, supporting data, solution and how it leverages IBM Z (show tech stack, LinuxONE instance and model); plus code (GitHub/GitLab link or zip). Optional: flowchart, prototype. Project title must contain the Team Name, e.g. [Team Name_IBM Z Datathon 2026 Project].
+- Judging (Datathon): 1 Value to the Community & Theme Alignment; 2 Novelty & Idea Originality; 3 Technical Design & use of Mainframe/LinuxONE Community Cloud and AI/ML open-source packages (is the platform used meaningfully, not just as hosting? is the architecture sound?). AI Innovation Excellence Awards: 1 AI Innovation & Originality (genuine innovation or generic add-on?); 2 Transformational Impact & Technical Excellence.
+- Help: Discord https://discord.gg/vVUwEJh3fH, mentor channels https://discord.com/channels/1517057210029441044/1559111191899668540 and https://discord.com/channels/1517057210029441044/1517857148778844310, or mention @simanga_.
 Never ask for or accept passwords, private key contents or personal data.`;
 
 export default async function handler(req, res) {

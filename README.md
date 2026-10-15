@@ -18,8 +18,11 @@ Includes a progress tracker (saved in the browser), copy buttons, an email check
 
    Without the key, the assistant still works using built-in answers.
 
+## Participant Guidebook and countdown
+The **Guidebook** tab holds the event details, hubs, themes, submission rules and checklist, judging criteria and help links. The top-right countdown runs in UTC from 17 Oct 2026 00:00 to 19 Oct 2026 00:00 (change `countdownStart` / `countdownEnd` in `CFG`).
+
 ## Edit the event details
-Open `app.js` and change `CFG` at the top (event code, sample description, blocked email domains).
+Open `app.js` and change `CFG` and `GUIDE` at the top (event code, sample description, blocked email domains, countdown, links, hubs, judging text).
 
 ## Notes
 - The email checker runs in the browser only; nothing is stored or sent.

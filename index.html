@@ -25,9 +25,21 @@
         <div class="brand-sub">IBM Z Datathon 2026 · LinuxONE Setup Guide</div>
       </div>
     </div>
-    <div class="progress-wrap" aria-label="Overall progress">
-      <div class="progress-label"><span id="progressText">0% done</span></div>
-      <div class="progress"><div id="progressBar"></div></div>
+    <div class="hright">
+      <div class="progress-wrap" aria-label="Overall progress">
+        <div class="progress-label"><span id="progressText">0% done</span></div>
+        <div class="progress"><div id="progressBar"></div></div>
+      </div>
+      <div class="countdown" id="countdown" role="timer" aria-label="Datathon countdown">
+        <div class="cd-label" id="cdLabel">STARTS IN</div>
+        <div class="cd-boxes">
+          <div><b id="cdD">--</b><small>days</small></div>
+          <div><b id="cdH">--</b><small>hrs</small></div>
+          <div><b id="cdM">--</b><small>min</small></div>
+          <div><b id="cdS">--</b><small>sec</small></div>
+        </div>
+        <div class="cd-tz">UTC · 17–19 Oct 2026</div>
+      </div>
     </div>
   </header>
 
@@ -37,6 +49,7 @@
       <button class="step-btn" data-step="1"><span class="num">2</span><span><b>Provision</b><small>Create your server</small></span></button>
       <button class="step-btn" data-step="2"><span class="num">3</span><span><b>Connect</b><small>Windows or Mac</small></span></button>
       <button class="step-btn" data-step="3"><span class="num">✓</span><span><b>Done</b><small>You're ready</small></span></button>
+      <button class="step-btn guide" data-step="4"><span class="num">📖</span><span><b>Guidebook</b><small>Rules, submission, judging</small></span></button>
     </nav>
 
     <section class="stage" id="stage" aria-live="polite"></section>
