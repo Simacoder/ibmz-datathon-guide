@@ -38,7 +38,7 @@
           <div><b id="cdM">--</b><small>min</small></div>
           <div><b id="cdS">--</b><small>sec</small></div>
         </div>
-        <div class="cd-tz">UTC · 17–19 Oct 2026</div>
+        <div class="cd-tz" id="cdSub">&nbsp;</div>
       </div>
     </div>
   </header>
@@ -51,6 +51,7 @@
       <button class="step-btn" data-step="3"><span class="num">✓</span><span><b>Done</b><small>You're ready</small></span></button>
       <button class="step-btn guide" data-step="4"><span class="num">📖</span><span><b>Guidebook</b><small>Rules, submission, judging</small></span></button>
       <button class="step-btn guide" data-step="5"><span class="num">❓</span><span><b>FAQs</b><small>Quick answers</small></span></button>
+      <button class="step-btn guide" data-step="6"><span class="num">📅</span><span><b>Schedule</b><small>In your time zone</small></span></button>
     </nav>
 
     <section class="stage" id="stage" aria-live="polite"></section>
@@ -63,13 +64,13 @@
   <button id="chatFab" class="fab" aria-label="Ask the setup guide">💬 Need help?</button>
   <aside id="chat" class="chat hidden" aria-label="Setup assistant">
     <div class="chat-head">
-      <div><b>Setup Guide Assistant</b><small>Ask me anything about the lab setup</small></div>
+      <div><b>Setup Guide Assistant</b><small>Here to help — you’ve got this 🌟</small></div>
       <button id="chatClose" aria-label="Close">✕</button>
     </div>
     <div id="chatLog" class="chat-log"></div>
     <div class="chips" id="chips"></div>
     <form id="chatForm" class="chat-form">
-      <input id="chatInput" placeholder="e.g. Which email should I use?" autocomplete="off" />
+      <input id="chatInput" placeholder="Tell me what’s going wrong…" autocomplete="off" />
       <button type="submit">Send</button>
     </form>
   </aside>
