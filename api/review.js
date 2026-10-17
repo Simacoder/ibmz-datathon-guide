@@ -5,7 +5,7 @@
 //  - ai:   a short coach's read from Claude (only if ANTHROPIC_API_KEY is set)
 // Only api.github.com and api.anthropic.com are ever contacted (no user-supplied hosts). Nothing is stored.
 
-const WIN = { start: Date.UTC(2026, 9, 17, 3, 30), end: Date.UTC(2026, 9, 18, 16, 30) };
+const WIN = { start: Date.UTC(2026, 9, 17, 0, 0), end: Date.UTC(2026, 9, 18, 16, 30) }; // earliest hub kick-off → submission deadline
 const hits = new Map();
 function limited(ip) {
   const now = Date.now();

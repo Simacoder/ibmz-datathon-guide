@@ -5,7 +5,7 @@
 // Without ANTHROPIC_API_KEY it returns 503 and the site uses its built-in local assistant instead.
 
 // Official schedule in UTC (the site shows each visitor their own local time).
-const SCHED = { kickoffStart: Date.UTC(2026, 9, 17, 3, 30), kickoffEnd: Date.UTC(2026, 9, 17, 4, 30), datathonEnd: Date.UTC(2026, 9, 18, 16, 30), submitEnd: Date.UTC(2026, 9, 23, 18, 29) };
+const SCHED = { kickoffStart: Date.UTC(2026, 9, 17, 3, 15), submitEnd: Date.UTC(2026, 9, 18, 16, 30) };
 const DISCORD = "https://discord.gg/vVUwEJh3fH";
 const MAX_STEPS = 4; // tool-use rounds per request
 
@@ -59,7 +59,7 @@ const FACTS = `FACTS
 - Mentors say recordings of sessions will be shared; watch Discord announcements.
 - Mentor guidance on rules: team work must be done during the Datathon itself, not old work (mentors said "within 24 hours of the Datathon"; no confirmed rule for partial reuse, so send people to the organisers). The project must be deployed on LinuxONE: collaborate in GitHub, then deploy to the team's one LinuxONE server. Create the demo video and have its link ready to upload. Mentors also recommend a short PowerPoint summarising the problem and solution; the official required items remain video (max 3 minutes) + code, so tell people to check the submission page for exact fields. No official step-by-step deployment guide is confirmed - jupyter-lab-ml is the closest hands-on sample.
 - Lost .pem key: check the browser Downloads list (Ctrl+J, or Cmd+Shift+J on Mac), search the computer for *.pem, ask the teammate who created the server. IBM only gives the key when the key pair is created, so it cannot be recovered. If the server is brand new with nothing on it, delete it and create a new one with a new key pair; if it has work on it, ask mentors before deleting anything.
-- Event: IBM Z Datathon 2026, 17-18 October 2026. In-person at 8 hubs (Saveetha Engineering College Chennai; Global Academy of Technology Bangalore; Manchester University UK; New York University USA; University of Texas at Dallas USA; Federation University Ballarat Australia; Cyberjaya University Malaysia; NTU Singapore) plus Global Virtual. Teams of 4-6. Prize bucket $50k+. Official schedule (UTC; the Schedule tab shows each event in the participant's own time zone with add-to-calendar buttons): Global Virtual Kick-Off 17 Oct 03:30-04:30 UTC (9:00-10:00 AM IST); hacking period 17 Oct 04:30 UTC to 18 Oct 16:30 UTC; project submissions 18 Oct 04:30 UTC to 23 Oct 18:29 UTC; feedback survey 18 Oct 05:00-05:30 UTC; virtual/global closing ceremony window 18 Oct 05:30-18:29 UTC (the exact session time is not confirmed - say so). The site countdown follows this schedule.
+- Event: IBM Z Datathon 2026, 17-18 October 2026. In-person at 8 hubs (Saveetha Engineering College Chennai; Global Academy of Technology Bangalore; Manchester University UK; New York University USA; University of Texas at Dallas USA; Federation University Ballarat Australia; Cyberjaya University Malaysia; NTU Singapore) plus Global Virtual. Teams of 4-6. Prize bucket $50k+. Official schedule (from the Hack2Skill timeline, UTC; the Schedule tab shows each event in the participant's own time zone with add-to-calendar): Get Your LinuxONE System Ready (mandatory) 16 Oct 13:45-15:00 UTC; PROJECT SUBMISSIONS window 16 Oct 23:45 UTC to 18 Oct 16:30 UTC (= 18 Oct 18:30 SAST) - this is the submission DEADLINE, NOT 23 Oct; Australia kick-off 17 Oct 00:00-01:00 UTC; Malaysia and Singapore kick-off 01:00-02:00 UTC; Global Kick-off 03:15-04:30 UTC (also announced as 9:00-10:00 AM IST); Manchester kick-off 09:00-10:00 UTC; New York 13:00-14:00 UTC; Dallas 14:00-15:00 UTC; Virtual Closing Ceremony 18 Oct 05:00-05:30 UTC; Global Closing Ceremony 18 Oct 05:30-18:29 UTC (listed as a long window - exact session not confirmed); Feedback survey 18 Oct 04:30 UTC to 23 Oct 18:29 UTC. It is a 24-hour hybrid hackathon. If anything differs from the Hack2Skill page, Hack2Skill wins. The site countdown goes to the Global Kick-off, then to the submission deadline.
 - In-person confirmation emails: an SSF organiser said that if a team has no email for in-person participation, they should attend virtually, and that concerns are being raised. Outcomes are not guaranteed. Whether virtual teams are evaluated or rewarded differently is NOT confirmed - say so. Whether a theme can be changed after the abstract is NOT confirmed - say so and point to the organisers.
 - Challenge: no single problem statement. Themes: "Real-time AI for critical decisions" and "AI secured: Innovation without exposure". Wildcard entry allowed for an important or overlooked problem outside the themes, using AI in a new, unexpected or technically ambitious way. Teams must leverage IBM Z (LinuxONE).
 - Submission: https://hack2skill.com/event/datathon-2026 (how-to video: https://youtu.be/3_L3T__zEco). Required: video of max 3 minutes covering problem statement, supporting data, solution and how it leverages IBM Z (show tech stack, LinuxONE instance and model); plus code (GitHub/GitLab link or zip). Optional: flowchart, prototype. Project title must contain the Team Name, e.g. [Team Name_IBM Z Datathon 2026 Project].
@@ -115,7 +115,7 @@ const TOOLS = [
   },
   {
     name: "countdown",
-    description: "Get the Datathon countdown phase (before kick-off, hacking period, submissions open, ended) with seconds to the next milestone (UTC).",
+    description: "Get the Datathon countdown phase (before kick-off, hacking and submissions open, ended) with seconds to the next milestone (UTC).",
     input_schema: { type: "object", properties: {} },
   },
 ];
@@ -182,8 +182,7 @@ function runTool(name, input = {}) {
     const now = Date.now();
     let phase, target;
     if (now < SCHED.kickoffStart) { phase = "before_kickoff"; target = SCHED.kickoffStart; }
-    else if (now < SCHED.datathonEnd) { phase = "hacking_period"; target = SCHED.datathonEnd; }
-    else if (now < SCHED.submitEnd) { phase = "submissions_open"; target = SCHED.submitEnd; }
+    else if (now < SCHED.submitEnd) { phase = "hacking_and_submissions_open"; target = SCHED.submitEnd; }
     else { phase = "ended"; target = now; }
     result = { phase, seconds_to_next_milestone: Math.max(0, Math.round((target - now) / 1000)), milestone_utc: new Date(target).toISOString() };
   } else {

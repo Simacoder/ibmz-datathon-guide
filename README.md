@@ -8,7 +8,7 @@ A guided, mobile-friendly site for participants:
 - **Schedule:** every event in the visitor's own time zone with UTC underneath, plus add-to-calendar (Google link and a `.ics` file for Apple/Outlook).
 - **Review:** a project readiness check for teams and mentors — deliverables, fit with the guidelines, judging-criteria signals, plus a scan of a public GitHub repo (`api/review.js`) and an optional Claude coach's read. Indicative only; it never predicts a win. Optional env var `GITHUB_TOKEN` raises GitHub's rate limit for repo scans.
 - **FAQs:** searchable, by topic. Answers learned from the 2025 Datathon are labelled because the 2026 process may differ.
-- **Countdown** (top right) follows the official schedule: kick-off, end of the hacking period, submission deadline.
+- **Countdown** (top right) follows the official schedule: Global Kick-off and the project-submission deadline (18 Oct 16:30 UTC).
 - **"Need help?" assistant:** agentic and humane (see below).
 
 ## Deploy on Vercel

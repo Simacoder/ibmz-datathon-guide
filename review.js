@@ -2,7 +2,7 @@
    Rules-based review that runs in the browser (nothing leaves the page), optionally enriched by /api/review
    (public GitHub repo scan + Claude coach). Indicative only: it cannot predict how judges will score. */
 (function () {
-  const WIN = { start: Date.UTC(2026, 9, 17, 3, 30), end: Date.UTC(2026, 9, 18, 16, 30) }; // kick-off → end of hacking (UTC)
+  const WIN = { start: Date.UTC(2026, 9, 17, 0, 0), end: Date.UTC(2026, 9, 18, 16, 30) }; // earliest hub kick-off → submission deadline (UTC)
   const THEMES = ["Theme 1 · Real-time AI for critical decisions", "Theme 2 · AI secured: Innovation without exposure", "Wildcard (outside the two themes)"];
   const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
   const KEYS = ["team", "title", "theme", "problem", "data", "solution", "ibmz", "different", "repo", "video", "deployed", "window", "videoIbm", "flow", "proto", "ppt"];
