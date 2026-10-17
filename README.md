@@ -6,6 +6,7 @@ A guided, mobile-friendly site for participants:
 - **Steps 1–3:** register on the IBM LinuxONE Community Cloud (event code `SSF2026`, non-Microsoft email only), provision a server, connect from Windows (PuTTY) or Mac (Terminal). Only one member per team creates the server.
 - **Guidebook:** event details, hubs, themes, submission checklist, judging criteria, labs and videos (jupyter-lab-ml, setup video).
 - **Schedule:** every event in the visitor's own time zone with UTC underneath, plus add-to-calendar (Google link and a `.ics` file for Apple/Outlook).
+- **Review:** a project readiness check for teams and mentors — deliverables, fit with the guidelines, judging-criteria signals, plus a scan of a public GitHub repo (`api/review.js`) and an optional Claude coach's read. Indicative only; it never predicts a win. Optional env var `GITHUB_TOKEN` raises GitHub's rate limit for repo scans.
 - **FAQs:** searchable, by topic. Answers learned from the 2025 Datathon are labelled because the 2026 process may differ.
 - **Countdown** (top right) follows the official schedule: kick-off, end of the hacking period, submission deadline.
 - **"Need help?" assistant:** agentic and humane (see below).
