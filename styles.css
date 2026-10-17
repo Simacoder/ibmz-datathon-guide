@@ -232,3 +232,6 @@ select.input{appearance:auto}
 .rv.warn,.rv.weak{border-color:#e8b84a;background:rgba(232,184,74,.07)}
 .rv.pass,.rv.strong{border-color:rgba(75,227,166,.5)}
 .rv-verdict.bad{color:var(--bad)}.rv-verdict.warn{color:#e8b84a}.rv-verdict.ok{color:var(--ok)}
+
+.cd-submit{display:block;margin-top:6px;padding:7px 10px;border-radius:10px;background:var(--blue);color:#fff;font:700 12px Inter;text-decoration:none;box-shadow:0 4px 14px rgba(47,123,255,.5)}
+.cd-submit:hover{background:var(--blue-2)}
